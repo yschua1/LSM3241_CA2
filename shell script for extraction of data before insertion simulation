@@ -31,6 +31,8 @@ mkdir -p results/fastqc
 # perform quality check of the data obtained
 fastqc data/*.fq* -o results/fastqc
 
+# to find the location of the trimmer
+dpkg -L trimmomatic
 # copying of trimmer to cureent working directory
 cp /usr/share/trimmomatic/NexteraPE-PE.fa . 
 
