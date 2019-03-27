@@ -1,0 +1,89 @@
+BiocManager::install("Biostrings")
+setwd("C:/Users/cys_h/Desktop/3241/CA_2")
+getwd()
+library(Biostrings)
+
+# loading and reading the genomic sequence of yeast
+files <- list.files(path = "data/genome", pattern = "*.fa", full.names = TRUE)
+genome <- readDNAStringSet(filepath = files, format="fasta",
+                           nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
+genome
+
+# loading and reading of transposons sequence both forward and reverse
+trp <- list.files(path = "data/transposons",  pattern = "ty5_6p.fa", full.names = TRUE)
+trans <- readDNAStringSet(filepath = trp, format="fasta",
+                          nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
+trans
+transr <- reverse(readDNAStringSet(filepath = trp, format="fasta",
+                          nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE))
+transr
+
+# target chromosomes
+chr3 <- genome[['chrIII']]
+chr3
+chr11 <- genome[["chrXI"]]
+chr11
+chr12 <- genome[['chrXII']]
+chr12
+
+# function to insert the transposons into the area of interest in chromosome 11
+inserttrp11 <- function(x){
+  subseq(chr11, x, x-1) <- trans[[1]]
+  return(subseq(chr11))
+}
+# the entire chromosome after insertion is extracted for alignment later
+
+# site of interest, the range has to increase by one as the insertion function adds before the base number
+insert_site11 <- unique(319985:320042) 
+
+#loop to simulate insertion for all 58 sites
+for (x in insert_site11){
+  writeXStringSet(DNAStringSet(inserttrp11(x)), tempfile(), format = "fasta")
+}
+
+# to locate the exact folder of where the files are generated
+ tempfile()
+# extract the files from the folder to another location before shutting R down or inserting to next chromosome, do note that in windows explorer it should be a forward slash after the drive and only one slash per division
+ 
+# function to insert the transposons that is reversed into the area of interest in chromosome 12
+inserttrpr12 <- function(x){
+   subseq(chr12, x, x-1) <- transr[[1]]
+   return(subseq(chr12))
+ }
+# the entire chromosome after insertion is extracted for alignment later 
+# site of interest, the range has to increase by one as the insertion function adds before the base number
+insert_siter12 <- unique(182484:182524) 
+
+#loop to simulate insertion for all 41 sites
+for (x in insert_siter12){
+   writeXStringSet(DNAStringSet(inserttrpr12(x)), tempfile(), format = "fasta") 
+}
+ 
+# function to insert the transposons into the area of interest in chromosome 12
+inserttrp12 <- function(x){
+   subseq(chr12, x, x-1) <- trans[[1]]
+   return(subseq(chr12))
+ }
+# the entire chromosome after insertion is extracted for alignment later 
+# site of interest, the range has to increase by one as the insertion function adds before the base number
+insert_site12 <- unique(913011:913060) 
+ 
+#loop to simulate insertion for all 50 sites
+for (x in insert_site12){
+   writeXStringSet(DNAStringSet(inserttrp12(x)), tempfile(), format = "fasta")
+}
+ 
+# function to insert the transposons into the area of interest in chromosome 3
+inserttrp3 <- function(x){
+   subseq(chr3, x, x-1) <- trans[[1]]
+   return(subseq(chr3))
+}
+# the entire chromosome after insertion is extracted for alignment later 
+# site of interest, the range has to increase by one as the insertion function adds before the base number
+insert_site3 <- unique(195566:195615) 
+ 
+#loop to simulate insertion for all 50 sites
+for (x in insert_site3){
+   writeXStringSet(DNAStringSet(inserttrp3(x)), tempfile(), format = "fasta")
+ }
+ 
