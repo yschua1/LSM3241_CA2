@@ -1,0 +1,94 @@
+# downloading of all the required applications into Ubuntu
+sudo apt-get install curl
+sudo apt-get install fastqc
+sudo apt-get install trimmomatic
+sudo apt-get install picard-tools
+sudo apt-get install bowtie bowtie2
+sudo apt-get install samtools
+sudo apt-get install libbz2-dev
+sudo apt-get install zlib1g-dev
+sudo apt-get install libncurses5-dev 
+sudo apt-get install libncursesw5-dev
+sudo apt-get install liblzma-dev
+wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2
+tar -vxjf samtools-1.9.tar.bz2
+cd samtools-1.9
+make
+sudo make install
+sudo apt-get install bcftools
+sudo apt-get install bedtools
+
+# creation of folders
+cd ../../../mnt/c/users/cys_h/desktop/3241/CA_2
+mkdir -p data results
+
+# downlaod file A0154961Y.tgz from https://mynbox.nus.edu.sg/userportal/#/shared/public/oD_2Npi_9jWyP_Yx/LSM3241-CA2 and move to data folder
+cd data
+tar -xzvf A0154961Y.tar
+cd ..
+mkdir -p results/fastqc	
+
+# perform quality check of the data obtained
+fastqc data/*.fq* -o results/fastqc
+
+# copying of trimmer to cureent working directory
+cp /usr/share/trimmomatic/NexteraPE-PE.fa . 
+
+mkdir -p results/trimmed results/orphaned
+
+# trimming of data to ensure better match with the referrnce genome
+for file in data/*_1.fq; 
+do
+   	A=$(basename $file _1.fq)
+    echo working on $A
+    TrimmomaticPE data/${A}_1.fq data/${A}_2.fq \
+    results/trimmed/${A}_1.trim.fastq.gz results/orphaned/${A}_1.untrim.fastq.gz \
+    results/trimmed/${A}_2.trim.fastq.gz results/orphaned/${A}_2.untrim.fastq.gz \
+    SLIDINGWINDOW:4:20 MINLEN:25 ILLUMINACLIP:NexteraPE-PE.fa:2:40:15 
+
+done
+
+mkdir -p data/combined
+# download and move the given referrnce files sacCer3.fa and ty5_6p.fa into "combined" folder
+# combine both files into one so that the transposon sequence will act as an additional 'chromosome' to the actual reference genome for alignment
+cat *.fa > combined.fa
+
+# build the reference file using bowtie2
+bowtie2-build combined.fa com
+cd ../..
+
+mkdir -p results/combined
+mkdir -p results/combined/sam results/combined/bam
+
+# aligning the data to the reference genome using bowtie2
+for file in results/trimmed/*_1.trim.fastq.gz ; do
+    A=$(basename $file _1.trim.fastq.gz)
+    echo running $A
+    bowtie2 -x data/combined/com \
+         --very-fast -p 4\
+         -1 results/trimmed/${A}_1.trim.fastq.gz \
+         -2 results/trimmed/${A}_2.trim.fastq.gz \
+         -S results/combined/sam/${A}.sam
+done
+
+# conversion of sam file to binary version bam file
+for file in results/combined/sam/*.sam ;
+do
+	A=$(basename $file .
+  echo $A
+  samtools view -S -b results/combined/sam/${A}.sam > results/combined/bam/${A}-aligned.bam
+done
+
+# sorting the aligned data by chromosome number
+for file in results/combined/bam/*-aligned.bam ;
+do
+	A=$(basename $file -aligned.bam)
+  echo $A
+  samtools sort results/combined/bam/${A}-aligned.bam -o results/combined/bam/${A}-sorted.bam
+done
+
+# creation of the index file for the sorted bam file
+samtools index results/combined/bam/A0154961Y-sorted.bam
+
+# install IGV from https://software.broadinstitute.org/software/igv/download and launch it to view alignment
+# identification of mapped regions where the mate is mapped to the transposon sequence to identify potential location of the insertion
