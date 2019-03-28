@@ -48,7 +48,7 @@ samtools sort results/insertion_11/bam/${f}-aligned.bam -o results/insertion_11/
 done
 
 # indexing all the files
-for file in results/insertion_11/bam*-sorted.bam
+for file in results/insertion_11/bam/*-sorted.bam
 do
 f=$(basename $file -sorted.bam)
 samtools index results/insertion_11/bam/${f}-sorted.bam
@@ -104,7 +104,7 @@ samtools sort results/insertion_12/bam/${f}-aligned.bam -o results/insertion_12/
 done
 
 # indexing all the files
-for file in results/insertion_12/bam*-sorted.bam
+for file in results/insertion_12/bam/*-sorted.bam
 do
 f=$(basename $file -sorted.bam)
 samtools index results/insertion_12/bam/${f}-sorted.bam
@@ -160,7 +160,7 @@ samtools sort results/insertion_12r/bam/${f}-aligned.bam -o results/insertion_12
 done
 
 # indexing all the files
-for file in results/insertion_12r/bam*-sorted.bam
+for file in results/insertion_12r/bam/*-sorted.bam
 do
 f=$(basename $file -sorted.bam)
 samtools index results/insertion_12r/bam/${f}-sorted.bam
