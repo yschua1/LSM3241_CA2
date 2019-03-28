@@ -14,7 +14,8 @@ trp <- list.files(path = "data/transposons",  pattern = "ty5_6p.fa", full.names 
 trans <- readDNAStringSet(filepath = trp, format="fasta",
                           nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE)
 trans
-transr <- reverse(readDNAStringSet(filepath = trp, format="fasta",
+# to obtain the complement of the transposon when read backwards for reverse orientaion insertion
+transr <- reverseComplement(readDNAStringSet(filepath = trp, format="fasta",
                           nrec=-1L, skip=0L, seek.first.rec=FALSE, use.names=TRUE))
 transr
 
