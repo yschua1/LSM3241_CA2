@@ -1,0 +1,224 @@
+cd ../..
+# create folder for insertion in chromosome 11
+mkdir -p insertion_11
+# simulated insertion files from R is moved into this directory 
+cd insertion_11
+
+# change all files to FASTA format
+for f in *; do 
+    mv -- "$f" "${f%}.fa"
+done
+
+mkdir -p sam bam
+
+cd ..
+# to build reference indexes for alignment
+for file in insertion_11/*.fa
+do
+f=$(basename $file .fa)
+echo $f
+bowtie2-build insertion_11/${f}.fa insertion_11/${f}
+done
+
+# to retrieve all the indexes built for alignment
+export BOWTIE2_INDEXES=$(pwd)/results/insertion_11
+
+# align trimmed data sequence against all the simulated insertion
+for file in ls results/insertion_11/*.fa;
+do
+f=$(basename $file .fa)
+echo running $f
+bowtie2 -x ${f} --very-fast -p 4 -1 results/trimmed/A0154961Y_1.trim.fastq -2 results/trimmed/A0154961Y_2.trim.fastq -S results/insertion_11/sam/${f}-aligned.sam
+done
+
+# conversion of file to binary version
+for file in results/insertion_11/sam/*.sam 
+do	
+f=$(basename $file .sam)                 
+echo $f                 
+samtools view -S -b results/insertion_11/sam/${f}.sam > results/insertion_11/bam/${f}-aligned.bam
+done
+
+# sorting of all the files
+for file in results/insertion_11/bam/*-aligned.bam 
+do
+f=$(basename $file -aligned.bam)               
+echo $f
+samtools sort results/insertion_11/bam/${f}-aligned.bam -o results/insertion_11/bam/${f}-sorted.bam
+done
+
+# indexing all the files
+for file in results/insertion_11/bam*-sorted.bam
+do
+f=$(basename $file -sorted.bam)
+samtools index results/insertion_11/bam/${f}-sorted.bam
+done
+# use IGV to identify the how each data is aligned to identify difference
+
+# create new folder for chromosome 12 insertion
+mkdir -p insertion_12
+# simulated insertion files from R is moved into this directory 
+cd insertion_12
+
+# change all files to FASTA format
+for f in *; do 
+    mv -- "$f" "${f%}.fa"
+done
+
+mkdir -p sam bam
+cd ..
+
+# to build reference indexes for alignment
+for file in insertion_12/*.fa
+do
+f=$(basename $file .fa)
+echo $f
+bowtie2-build insertion_12/${f}.fa insertion_12/${f}
+done
+
+# to retrieve all the indexes built for alignment
+export BOWTIE2_INDEXES=$(pwd)/results/insertion_12
+
+# align trimmed data sequence against all the simulated insertion
+for file in ls results/insertion_12/*.fa;
+do
+f=$(basename $file .fa)
+echo running $f
+bowtie2 -x ${f} --very-fast -p 4 -1 results/trimmed/A0154961Y_1.trim.fastq -2 results/trimmed/A0154961Y_2.trim.fastq -S results/insertion_12/sam/${f}-aligned.sam
+done
+
+# conversion of file to binary version
+for file in results/insertion_12/sam/*.sam 
+do	
+f=$(basename $file .sam)                 
+echo $f                 
+samtools view -S -b results/insertion_12/sam/${f}.sam > results/insertion_12/bam/${f}-aligned.bam
+done
+
+# sorting of all the files
+for file in results/insertion_12/bam/*-aligned.bam 
+do
+f=$(basename $file -aligned.bam)               
+echo $f
+samtools sort results/insertion_12/bam/${f}-aligned.bam -o results/insertion_12/bam/${f}-sorted.bam
+done
+
+# indexing all the files
+for file in results/insertion_12/bam*-sorted.bam
+do
+f=$(basename $file -sorted.bam)
+samtools index results/insertion_12/bam/${f}-sorted.bam
+done
+# use IGV to identify the how each data is aligned to identify difference
+
+# create folder for reversed insertion in chromosome 12
+mkdir -p insertion_12r
+# simulated insertion files from R is moved into this directory 
+cd insertion_12r
+
+# change all files to FASTA format
+for f in *; do 
+    mv -- "$f" "${f%}.fa"
+done
+
+mkdir -p sam bam
+
+cd ..
+# to build reference indexes for alignment
+for file in insertion_12r/*.fa
+do
+f=$(basename $file .fa)
+echo $f
+bowtie2-build insertion_12r/${f}.fa insertion_12r/${f}
+done
+
+# to retrieve all the indexes built for alignment
+export BOWTIE2_INDEXES=$(pwd)/results/insertion_12r
+
+# align trimmed data sequence against all the simulated insertion
+for file in ls results/insertion_12r/*.fa;
+do
+f=$(basename $file .fa)
+echo running $f
+bowtie2 -x ${f} --very-fast -p 4 -1 results/trimmed/A0154961Y_1.trim.fastq -2 results/trimmed/A0154961Y_2.trim.fastq -S results/insertion_12r/sam/${f}-aligned.sam
+done
+
+# conversion of file to binary version
+for file in results/insertion_12r/sam/*.sam 
+do	
+f=$(basename $file .sam)                 
+echo $f                 
+samtools view -S -b results/insertion_12r/sam/${f}.sam > results/insertion_12r/bam/${f}-aligned.bam
+done
+
+# sorting of all the files
+for file in results/insertion_12r/bam/*-aligned.bam 
+do
+f=$(basename $file -aligned.bam)               
+echo $f
+samtools sort results/insertion_12r/bam/${f}-aligned.bam -o results/insertion_12r/bam/${f}-sorted.bam
+done
+
+# indexing all the files
+for file in results/insertion_12r/bam*-sorted.bam
+do
+f=$(basename $file -sorted.bam)
+samtools index results/insertion_12r/bam/${f}-sorted.bam
+done
+# use IGV to identify the how each data is aligned to identify difference
+
+# create new folder for chromosome 3 insertion
+mkdir -p insertion_3
+# simulated insertion files from R is moved into this directory 
+cd insertion_3
+
+# change all files to FASTA format
+for f in *; do 
+    mv -- "$f" "${f%}.fa"
+done
+
+mkdir -p sam bam
+cd ..
+
+# to build reference indexes for alignment
+for file in insertion_3/*.fa
+do
+f=$(basename $file .fa)
+echo $f
+bowtie2-build insertion_3/${f}.fa insertion_3/${f}
+done
+
+# to retrieve all the indexes built for alignment
+export BOWTIE2_INDEXES=$(pwd)/results/insertion_3
+
+# align trimmed data sequence against all the simulated insertion
+for file in ls results/insertion_3/*.fa;
+do
+f=$(basename $file .fa)
+echo running $f
+bowtie2 -x ${f} --very-fast -p 4 -1 results/trimmed/A0154961Y_1.trim.fastq -2 results/trimmed/A0154961Y_2.trim.fastq -S results/insertion_3/sam/${f}-aligned.sam
+done
+
+# conversion of file to binary version
+for file in results/insertion_3/sam/*.sam 
+do	
+f=$(basename $file .sam)                 
+echo $f                 
+samtools view -S -b results/insertion_3/sam/${f}.sam > results/insertion_3/bam/${f}-aligned.bam
+done
+
+# sorting of all the files
+for file in results/insertion_3/bam/*-aligned.bam 
+do
+f=$(basename $file -aligned.bam)               
+echo $f
+samtools sort results/insertion_3/bam/${f}-aligned.bam -o results/insertion_3/bam/${f}-sorted.bam
+done
+
+# indexing all the files
+for file in results/insertion_3/bam*-sorted.bam
+do
+f=$(basename $file -sorted.bam)
+samtools index results/insertion_12/bam/${f}-sorted.bam
+done
+# use IGV to identify the how each data is aligned to identify difference
