@@ -24,7 +24,7 @@ done
 export BOWTIE2_INDEXES=$(pwd)/results/insertion_11
 
 # align trimmed data sequence against all the simulated insertion
-for file in ls results/insertion_11/*.fa;
+for file in results/insertion_11/*.fa;
 do
 f=$(basename $file .fa)
 echo running $f
@@ -80,7 +80,7 @@ done
 export BOWTIE2_INDEXES=$(pwd)/results/insertion_12
 
 # align trimmed data sequence against all the simulated insertion
-for file in ls results/insertion_12/*.fa;
+for file in results/insertion_12/*.fa;
 do
 f=$(basename $file .fa)
 echo running $f
@@ -136,7 +136,7 @@ done
 export BOWTIE2_INDEXES=$(pwd)/results/insertion_12r
 
 # align trimmed data sequence against all the simulated insertion
-for file in ls results/insertion_12r/*.fa;
+for file in results/insertion_12r/*.fa;
 do
 f=$(basename $file .fa)
 echo running $f
@@ -192,7 +192,7 @@ done
 export BOWTIE2_INDEXES=$(pwd)/results/insertion_3
 
 # align trimmed data sequence against all the simulated insertion
-for file in ls results/insertion_3/*.fa;
+for file in results/insertion_3/*.fa;
 do
 f=$(basename $file .fa)
 echo running $f
