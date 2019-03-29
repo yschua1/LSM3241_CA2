@@ -1,0 +1,39 @@
+# installing packages needed for the visualisation of insertion
+install.packages('rlang')
+BiocManager::install("Gviz")
+BiocManager::install("GenomicRanges")
+BiocManager::install("BSgenome.Scerevisiae.UCSC.sacCer3", version = "3.8")
+BiocManager::install("TxDb.Scerevisiae.UCSC.sacCer3.sgdGene", version = "3.8")
+
+library(Gviz)
+library(GenomicRanges)
+library(BSgenome.Scerevisiae.UCSC.sacCer3)
+library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+
+# file needed for annotate the genes in the genome
+annotate <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+
+# to provide axis of where the genes and insertion are
+gtrack <- GenomeAxisTrack()
+
+# visualisation for insertion on chromosome 3
+itrack3 <- IdeogramTrack(genome = 'sacCer3', chromosome = 'chrIII')
+grtrack3 <- GeneRegionTrack(annotate, genome = 'sacCer3', chromosome = 'chrIII', name = 'Gene')
+highlight3 <- HighlightTrack(list(grtrack3), start = c(195580), width = 1, chromosome = 'chrIII', genome = 'sacCer3', inBackground=FALSE)
+plotTracks(list(itrack3,gtrack, highlight3), from=190000, to=200000,background.title = 'black', transcriptAnnotation='symbol')
+
+# visualisation for insertion on chromosome 11
+itrack11 <- IdeogramTrack(genome = 'sacCer3', chromosome = 'chrXI')
+grtrack11 <- GeneRegionTrack(annotate, genome = 'sacCer3', chromosome = 'chrXI', name = 'Gene')
+highlight11 <- HighlightTrack(list(grtrack11), start = c(320008), width = 1, chromosome = 'chrXI', genome = 'sacCer3', inBackground=FALSE)
+plotTracks(list(itrack11,gtrack, highlight11), from=315000, to=325000,background.title = 'black', transcriptAnnotation='symbol')
+
+# visualisation for insertion on chromosome 12 site 2
+itrack12 <- IdeogramTrack(genome = 'sacCer3', chromosome = 'chrXII')
+grtrack12 <- GeneRegionTrack(annotate, genome = 'sacCer3', chromosome = 'chrXII', name = 'Gene')
+highlight12 <- HighlightTrack(list(grtrack12), start = c(913029), width = 1, chromosome = 'chrXII', genome = 'sacCer3', inBackground=FALSE)
+plotTracks(list(itrack12,gtrack, highlight12), from=910000, to=920000,background.title = 'black', transcriptAnnotation='symbol')
+
+# visualisation for insertion on chromosome 12 site 1
+highlight12r <- HighlightTrack(list(grtrack12), start = c(182505), width = 1, chromosome = 'chrXII', genome = 'sacCer3', inBackground=FALSE)
+plotTracks(list(itrack12,gtrack, highlight12r), from=180000, to=190000,background.title = 'black', transcriptAnnotation='symbol')       
